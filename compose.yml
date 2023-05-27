@@ -1,0 +1,10 @@
+services:
+  database:
+    container_name: db_remi
+    image: mysql
+    restart: always
+    env_file:
+      - .env.development
+    ports:
+      - ${MYSQL_PORT}:${MYSQL_PORT}
+      
