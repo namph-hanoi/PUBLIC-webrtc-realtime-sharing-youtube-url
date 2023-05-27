@@ -5,6 +5,7 @@ import { SocketGatewayModule } from './socket-gateway/socket-gateway.module';
 import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserModule } from './user/user.module';
 
 let envFilePath = '../.env.development';
 if (process.env.ENVIRONMENT === 'PRODUCTION') {
@@ -15,7 +16,6 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
   imports: [
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     SocketGatewayModule,
-    AuthModule,
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: process.env.MYSQL_HOST,
@@ -27,6 +27,8 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
       entities: [],
       logging: process.env.MYSQL_LOGGING ? true : false,
     }),
+    AuthModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
