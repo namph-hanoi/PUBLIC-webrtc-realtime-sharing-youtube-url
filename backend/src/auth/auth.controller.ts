@@ -1,4 +1,4 @@
-import { Routes } from '../../utils/routes';
+import { Routes } from '../utils/routes';
 import { Controller, Post } from '@nestjs/common';
 
 @Controller(Routes.AUTH)

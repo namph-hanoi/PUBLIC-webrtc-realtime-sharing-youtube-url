@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { VideoSharingModule } from './video-sharing/video-sharing.module';
+import { entities } from './app.entity';
 
 let envFilePath = '../.env.development';
 if (process.env.ENVIRONMENT === 'PRODUCTION') {
@@ -24,8 +25,8 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
       database: process.env.MYSQL_DATABASE,
-      synchronize: false,
-      entities: [],
+      synchronize: true,
+      entities,
       logging: process.env.MYSQL_LOGGING ? true : false,
     }),
     AuthModule,
