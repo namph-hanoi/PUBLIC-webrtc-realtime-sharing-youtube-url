@@ -6,6 +6,7 @@ import { AuthModule } from './auth/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
+import { VideoSharingModule } from './video-sharing/video-sharing.module';
 
 let envFilePath = '../.env.development';
 if (process.env.ENVIRONMENT === 'PRODUCTION') {
@@ -29,6 +30,7 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
     }),
     AuthModule,
     UserModule,
+    VideoSharingModule,
   ],
   controllers: [AppController],
   providers: [AppService],
