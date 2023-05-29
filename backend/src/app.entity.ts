@@ -1,3 +1,5 @@
 import { User } from "./user/user.entity";
+import { VideoSharing } from "./video-sharing/video-sharing.entity";
 
-export const entities = [User];
+// Pin: Specify all entities here
+export const entities = [User, VideoSharing];

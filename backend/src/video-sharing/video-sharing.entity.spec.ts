@@ -1,17 +1,17 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { User } from './user.entity';
+import { VideoSharing } from './video-sharing.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { VideoSharing } from '../video-sharing/video-sharing.entity';
+import { User } from '../user/user.entity';
 
 describe('UserEntity', () => {
-  let userRepository: Repository<User>;
+  let videoSharingRepository: Repository<User>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         {
-          provide: getRepositoryToken(User),
+          provide: getRepositoryToken(VideoSharing),
           useValue: {
             find: jest.fn(),
             insert: jest.fn(),
@@ -21,11 +21,11 @@ describe('UserEntity', () => {
     }).compile();
 
     // service = module.get<UserService>(UserService);
-    userRepository = module.get(getRepositoryToken(User));
+    videoSharingRepository = module.get(getRepositoryToken(VideoSharing));
   });
 
   it('UserEntity should be defined', () => {
-    expect(userRepository).toBeDefined();
+    expect(videoSharingRepository).toBeDefined();
   });
 
   it('UserEntity should have the property sharing', () => {
@@ -33,7 +33,7 @@ describe('UserEntity', () => {
     const mockSharing = new VideoSharing();
     mockSharing.owner = mockUser;
     mockUser.sharing = [mockSharing];
-    expect(mockUser).toHaveProperty('sharing');
-    expect(mockUser.sharing[0]).toMatchObject(mockSharing);
+    expect(mockSharing).toHaveProperty('owner');
+    expect(mockSharing.owner).toMatchObject(mockUser);
   });
 });

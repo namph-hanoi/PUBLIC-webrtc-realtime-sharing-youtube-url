@@ -3,30 +3,33 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
-  OneToOne,
+  ManyToOne,
   PrimaryGeneratedColumn,
   DeleteDateColumn,
 } from 'typeorm';
-import { VideoSharing } from '../video-sharing/video-sharing.entity';
+import { User } from '../user/user.entity';
 
-@Entity({ name: 'users' })
-export class User {
+@Entity({ name: 'video_sharings' })
+export class VideoSharing {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column()
-  email: string;
+  link: string;
 
   @Column()
-  password: string;
+  title: string;
+
+  @Column()
+  description: string;
+
+  @ManyToOne(() => User, (user) => user.sharing)
+  @JoinColumn({ name: 'owner_id' })
+  owner: User;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: number;
 
   @DeleteDateColumn({ name: 'deleted_at' })
   deleted_at: Date;
-
-  @OneToMany(() => VideoSharing, (videoSharing) => videoSharing.owner)
-  sharing: VideoSharing[];
 }
