@@ -36,4 +36,8 @@ describe('UserEntity', () => {
     expect(mockUser).toHaveProperty('sharing');
     expect(mockUser.sharing[0]).toMatchObject(mockSharing);
   });
+
+  it('Test UserEntity runs validation function', () => {
+    
+  });
 });
