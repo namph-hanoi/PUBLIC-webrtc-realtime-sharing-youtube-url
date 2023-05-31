@@ -15,4 +15,7 @@ describe('AuthController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+  it('Test payload mismatches DTO', () => {
+    // Create
+  });
 });
