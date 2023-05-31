@@ -2,17 +2,20 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
-import { DataSource } from 'typeorm';
+import { DataSource, DataSourceOptions } from 'typeorm';
 import { User } from '../src/user/user.entity';
 import { VideoSharing } from '../src/video-sharing/video-sharing.entity';
+import { entities } from '../src/app.entity';
 
-export const appDataSource = new DataSource({
+export const typeormConfig: DataSourceOptions = {
   type: 'sqlite',
   database: ':memory:',
-  entities: [User, VideoSharing],
   synchronize: true,
+  entities,
   logging: false,
-});
+};
+
+export const appDataSource = new DataSource(typeormConfig);
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;

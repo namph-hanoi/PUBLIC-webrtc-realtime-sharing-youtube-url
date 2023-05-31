@@ -14,20 +14,22 @@ if (process.env.ENVIRONMENT === 'PRODUCTION') {
   envFilePath = '../.env.production';
 }
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ envFilePath, isGlobal: true }),
     SocketGatewayModule,
     TypeOrmModule.forRoot({
-      type: 'mysql',
+      type: isTestEnv ? 'sqlite' : 'mysql',
       host: process.env.MYSQL_HOST,
       port: parseInt(process.env.MYSQL_PORT),
       username: process.env.MYSQL_USER,
       password: process.env.MYSQL_PASSWORD,
-      database: process.env.MYSQL_DATABASE,
+      database: isTestEnv ? ':memory:' : process.env.MYSQL_DATABASE,
       synchronize: true,
       entities,
-      logging: process.env.MYSQL_LOGGING ? true : false,
+      logging: isTestEnv ? false : !!process.env.MYSQL_LOGGING,
     }),
     AuthModule,
     UserModule,

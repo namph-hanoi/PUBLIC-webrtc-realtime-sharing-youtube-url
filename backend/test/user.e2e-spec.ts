@@ -57,7 +57,7 @@ describe('For Route /user... (e2e)', () => {
   it('/user/register ~ Test create user success', async () => {
     // Create a valid payload
     const mockPayload = {
-      email: 'namph.tech@gimail.com',
+      email: 'namph.tech@gmail.com',
       password: 'namph.tech@gmail.com',
     };
     const response = await request(app.getHttpServer())
