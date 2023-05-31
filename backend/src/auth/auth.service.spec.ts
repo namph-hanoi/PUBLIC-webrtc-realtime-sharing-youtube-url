@@ -15,6 +15,7 @@ import { Repository } from 'typeorm';
 describe('AuthService', () => {
   let service: AuthService;
   let userRepository: MockType<Repository<User>>;
+  let jwtService: JwtService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -29,6 +30,7 @@ describe('AuthService', () => {
     }).compile();
 
     service = module.get<AuthService>(AuthService);
+    jwtService = module.get<JwtService>(JwtService);
     userRepository = module.get(getRepositoryToken(User));
   });
 
@@ -58,10 +60,13 @@ describe('AuthService', () => {
     const mockUser = new User();
     mockUser.email = 'namph.tech@gmail.com';
     mockUser.password = 'namph.tech@gmail.com';
-    mockUser.validateInputPassword = jest.fn().mockReturnValue(false);
+    // mockUser.validateInputPassword = jest.fn().mockReturnValue(false);
     userRepository.save(mockUser);
     await expect(
-      service.login({ email: mockUser.email, password: 'anotherPassword' }),
+      service.login({
+        email: mockUser.email,
+        password: 'caseIncorrectPassword',
+      }),
     ).rejects.toThrowError(
       new HttpException('Wrong password', HttpStatus.BAD_REQUEST),
     );
@@ -69,5 +74,18 @@ describe('AuthService', () => {
   it('Test login successfully', async () => {
     // Create an existing entity with userRepository
     // Run the function with the same payload
+    const mockUser = new User();
+    mockUser.email = 'namph.tech@gmail.com';
+    mockUser.password = 'namph.tech@gmail.com';
+    mockUser.validateInputPassword = jest.fn().mockReturnValue(true);
+    userRepository.save(mockUser);
+    jest.spyOn(userRepository, 'findOne').mockReturnValue(mockUser);
+    jest.spyOn(jwtService, 'sign').mockReturnValue('github:namph-hanoi');
+
+    const loginResult = await service.login({
+      email: mockUser.email,
+      password: mockUser.password,
+    });
+    expect(loginResult.accessToken).toBe('github:namph-hanoi');
   });
 });

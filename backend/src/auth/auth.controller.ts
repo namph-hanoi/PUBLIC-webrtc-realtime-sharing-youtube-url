@@ -13,9 +13,9 @@ export class AuthController {
     return this.authService.login(loginDTO);
   }
 
-  @Post('check-login')
+  @Post('check-protected-route')
   @UseGuards(AuthGuard('jwt'))
-  checkNgon() {
+  checkGuard() {
     return 'OK';
   }
 }

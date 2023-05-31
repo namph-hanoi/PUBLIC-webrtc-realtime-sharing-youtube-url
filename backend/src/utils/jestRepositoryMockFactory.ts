@@ -8,7 +8,14 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
   () => ({
     findOne: jest.fn((entity) => ({
       ...entity,
-      validateInputPassword: () => null,
+      validateInputPassword: (password: string) => {
+        switch (password) {
+          case 'caseIncorrectPassword':
+            return false;
+          default:
+            return true;
+        }
+      },
     })),
     save: jest.fn((entity) => entity),
     validateInputPassword: jest.fn((entity) => entity),

@@ -11,9 +11,9 @@ import { ConfigService } from '@nestjs/config';
 const jwtFactory = {
   useFactory: async (configService: ConfigService) => {
     return {
-      secret: configService.get('JWT_SECRET'),
+      secret: configService.get<string>('JWT_SECRET'),
       signOptions: {
-        expiresIn: configService.get('JWT_LIFE_PERIOD'),
+        expiresIn: Number(configService.get<string>('JWT_LIFE_PERIOD')),
       },
     };
   },
