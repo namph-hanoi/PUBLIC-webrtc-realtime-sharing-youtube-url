@@ -7,17 +7,10 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-
-type MockType<T> = {
-  [P in keyof T]?: jest.Mock<{}>;
-};
-
-export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
-  () => ({
-    findOne: jest.fn((entity) => entity),
-    save: jest.fn((entity) => entity),
-  }),
-);
+import {
+  MockType,
+  repositoryMockFactory,
+} from '../utils/jestRepositoryMockFactory';
 
 describe('UserService', () => {
   let service: UserService;

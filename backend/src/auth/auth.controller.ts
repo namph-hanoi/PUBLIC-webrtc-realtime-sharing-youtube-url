@@ -1,13 +1,21 @@
 import { Routes } from '../utils/routes';
-import { Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { LoginDTO } from './dto/login-dto';
+import { AuthService } from './auth.service';
+import { AuthGuard } from '@nestjs/passport';
 
 @Controller(Routes.AUTH)
 export class AuthController {
-  // constructor() {}
+  constructor(private authService: AuthService) {}
 
-  @Post('register')
-  async register() {
-    console.log('rergister');
-    return 'connected /register';
+  @Post('login')
+  async login(@Body() loginDTO: LoginDTO) {
+    return this.authService.login(loginDTO);
+  }
+
+  @Post('check-login')
+  @UseGuards(AuthGuard('jwt'))
+  checkNgon() {
+    return 'OK';
   }
 }

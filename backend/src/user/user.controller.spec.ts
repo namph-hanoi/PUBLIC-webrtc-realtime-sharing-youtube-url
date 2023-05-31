@@ -4,7 +4,7 @@ import { UserService } from './user.service';
 import { plainToInstance } from 'class-transformer';
 import { CreateUserDTO } from './dto/create-user.dto';
 import { ArgumentMetadata, ValidationPipe } from '@nestjs/common';
-import { repositoryMockFactory } from './user.service.spec';
+import { repositoryMockFactory } from '../utils/jestRepositoryMockFactory';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { User } from './user.entity';
 

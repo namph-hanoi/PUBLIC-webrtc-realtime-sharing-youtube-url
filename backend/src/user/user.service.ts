@@ -12,18 +12,21 @@ import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class UserService {
-  //  Todo: constructor inject repository, implement like stuyy
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  // Todo: DTO passed from controller
+  async getUser(email: string) {
+    const user: User = await this.userRepository.findOne({
+      where: { email },
+    });
+    return user;
+  }
+
   async registerNewUser(createUserDTO: CreateUserDTO) {
     const { email, password } = createUserDTO;
 
-    const existingUser = await this.userRepository.findOne({
-      where: { email },
-    });
+    const existingUser = await this.getUser(email);
     if (existingUser) {
       throw new HttpException('User already existed', HttpStatus.CONFLICT);
     }
