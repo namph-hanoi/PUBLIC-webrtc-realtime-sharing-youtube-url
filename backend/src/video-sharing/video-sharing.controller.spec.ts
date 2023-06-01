@@ -15,4 +15,12 @@ describe('VideoSharingController', () => {
   it('should be defined', () => {
     expect(controller).toBeDefined();
   });
+
+  it('Test invalid validation of payload', async () => {
+    //
+  });
+
+  it('Test valid validation of payload', async () => {
+    //
+  });
 });
