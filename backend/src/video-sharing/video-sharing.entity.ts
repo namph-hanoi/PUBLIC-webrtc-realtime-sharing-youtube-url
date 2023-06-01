@@ -20,8 +20,11 @@ export class VideoSharing {
   @Column()
   title: string;
 
-  @Column()
+  @Column('text')
   description: string;
+
+  @Column()
+  thumbnail_link: string;
 
   @ManyToOne(() => User, (user) => user.sharing)
   @JoinColumn({ name: 'owner_id' })

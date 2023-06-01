@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Post,
+  Req,
   UseGuards,
   UsePipes,
   ValidationPipe,
@@ -9,6 +10,7 @@ import {
 import { VideoSharingService } from './video-sharing.service';
 import { CreateSharingDTO } from './dto/create-sharing.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { User } from '../user/user.entity';
 
 @Controller('video-sharing')
 export class VideoSharingController {
@@ -17,9 +19,13 @@ export class VideoSharingController {
   @UseGuards(AuthGuard('jwt'))
   @Post('create')
   @UsePipes(ValidationPipe)
-  createNewSharing(@Body() newSharingDTO: CreateSharingDTO) {
-    //
-    console.log('Get hit hard');
-    // return videoSharingService.createNewSharing
+  createNewSharing(
+    @Body() newSharingDTO: CreateSharingDTO,
+    @Req() request: Request & { user: User },
+  ) {
+    return this.videoSharingService.createNewSharing(
+      newSharingDTO,
+      request.user,
+    );
   }
 }
