@@ -18,11 +18,9 @@ export class AuthService {
       where: { email },
     });
 
-    //  Todo: change http error
     if (!user)
-      throw new HttpException('User not exists', HttpStatus.BAD_REQUEST);
-
-    const isValidPassword = user.validateInputPassword(password);
+      throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST);
+    const isValidPassword = await user.validateInputPassword(password);
 
     if (!isValidPassword) {
       throw new HttpException('Wrong password', HttpStatus.BAD_REQUEST);

@@ -52,7 +52,7 @@ describe('AuthService', () => {
 
     // Run the function
     await expect(service.login(mockUserDTO)).rejects.toThrowError(
-      new HttpException('User not exists', HttpStatus.BAD_REQUEST),
+      new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST),
     );
   });
   it('Test password mismatched', async () => {

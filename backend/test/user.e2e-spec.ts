@@ -9,6 +9,7 @@ import { User } from '../src/user/user.entity';
 describe('For Route /user... (e2e)', () => {
   let app: INestApplication;
 
+  // Todo: reafactor into beforeAll
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
