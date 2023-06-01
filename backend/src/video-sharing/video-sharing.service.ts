@@ -6,7 +6,7 @@ export class VideoSharingService {
     // Get repository VideoSharing
   ) {}
 
-  //  try { call google API to get the video info } catch (error)
+  //  try { call fetch youtube page to get the video info } catch (error)
 
   // videoSharingRepository check if previous item the same, throw new HttpException
 

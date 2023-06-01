@@ -38,9 +38,24 @@ describe('For Route /user... (e2e)', () => {
 
   it('/video-sharing/create ~ Test incorrect DTO format', async () => {
     // expect response status to be 400, and message contains 'Invalid youtube link'
+    const response = await request(app.getHttpServer())
+      .post('/video-sharing/create')
+      .set('Authorization', ` Bearer ${accessToken}`)
+      .send({
+        url: 'http://www.youtube.com/fake-no-secured-youtube',
+      });
+    expect(response.status).toBe(400);
+    expect(response.text).toContain('Invalid youtube link');
   });
 
   it('/video-sharing/create ~ Test wrong http method', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/video-sharing/create')
+      .set('Authorization', ` Bearer ${accessToken}`)
+      .send({
+        url: 'http://www.youtube.com/fake-no-secured-youtube',
+      });
+    expect(response.status).toBe(404);
   });
 
   it('/video-sharing/create ~ The last sharing is the same', async () => {
