@@ -6,7 +6,7 @@ import { UserModule } from 'src/user/user.module';
 import { appDataSource } from './app.e2e-spec';
 import { User } from '../src/user/user.entity';
 
-describe('For Route /user... (e2e)', () => {
+describe('For Route /auth... (e2e)', () => {
   let app: INestApplication;
   const mockPayload = {
     email: 'namph.tech@gmail.com',

@@ -5,9 +5,12 @@ import { AppModule } from '../src/app.module';
 import { UserModule } from 'src/user/user.module';
 import { appDataSource } from './app.e2e-spec';
 import { User } from '../src/user/user.entity';
+import { VideoSharingService } from '../src/video-sharing/video-sharing.service';
 
-describe('For Route /user... (e2e)', () => {
+describe('For Route /videosharing... (e2e)', () => {
   let app: INestApplication;
+  let videoSharingService: VideoSharingService;
+
   const mockPayload = {
     email: 'namph.tech@gmail.com',
     password: 'namph.tech@gmail.com',
@@ -30,6 +33,8 @@ describe('For Route /user... (e2e)', () => {
       .send(mockPayload);
 
     accessToken = await JSON.parse(loginResponse.text).accessToken;
+    videoSharingService =
+      moduleFixture.get<VideoSharingService>(VideoSharingService);
   });
 
   afterAll(async () => {
@@ -58,9 +63,28 @@ describe('For Route /user... (e2e)', () => {
     expect(response.status).toBe(404);
   });
 
-  it('/video-sharing/create ~ The last sharing is the same', async () => {
+  it('/video-sharing/create ~ Create new item successfully', async () => {
+    const response = await request(app.getHttpServer())
+      .post('/video-sharing/create')
+      .set('Authorization', ` Bearer ${accessToken}`)
+      .send({
+        url: 'https://www.youtube.com/watch?v=-4rfUS9fCEw',
+      });
+    expect(response.status).toBe(201);
   });
 
-  it('/video-sharing/create ~ Create new item successfully', async () => {
+  it('/video-sharing/create ~ Test youtube retruns random error', async () => {
+    jest.spyOn(videoSharingService, 'executeWget').mockImplementation(() => {
+      throw new Error('Random error from Youtube');
+    });
+    const response = await request(app.getHttpServer())
+      .post('/video-sharing/create')
+      .set('Authorization', ` Bearer ${accessToken}`)
+      .send({
+        url: 'https://www.youtube.com/watch?v=-4rfUS9fCEw',
+      });
+
+    expect(response.status).toBe(400);
+    expect(response.text).toContain('Fail fetching youtube page');
   });
 });
