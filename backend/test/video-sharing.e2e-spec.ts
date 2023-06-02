@@ -73,6 +73,18 @@ describe('For Route /videosharing... (e2e)', () => {
     expect(response.status).toBe(201);
   });
 
+  it('/video-sharing/ ~ Test get all entities', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/video-sharing')
+      .set('Authorization', ` Bearer ${accessToken}`)
+      .send({
+        url: 'https://www.youtube.com/watch?v=-4rfUS9fCEw',
+      });
+
+    expect(response.status).toBe(200);
+    expect(JSON.parse(response.text)[0]).toHaveProperty('id');
+  });
+
   it('/video-sharing/create ~ Test youtube retruns random error', async () => {
     jest.spyOn(videoSharingService, 'executeWget').mockImplementation(() => {
       throw new Error('Random error from Youtube');

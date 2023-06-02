@@ -22,3 +22,12 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
     validateInputPassword: jest.fn((entity) => entity),
   }),
 );
+
+export const sharingRepositoryMockFactory: () => MockType<Repository<any>> =
+  jest.fn(() => ({
+    save: jest.fn((entity) => entity),
+    create: jest.fn((entity) => entity),
+    find: jest.fn(() => [
+      { id: 123, link: 'https://www.youtube.com/watch?v=-4rfUS9fCEw' },
+    ]),
+  }));

@@ -56,4 +56,13 @@ export class VideoSharingService {
     await this.videoSharingRepository.save(newSharing);
     return instanceToPlain(newSharing);
   }
+
+  async getAllSharing() {
+    const allEntities = await this.videoSharingRepository.find({
+      relationLoadStrategy: 'join',
+      relations: ['owner'],
+    });
+    const response = instanceToPlain(allEntities);
+    return response;
+  }
 }

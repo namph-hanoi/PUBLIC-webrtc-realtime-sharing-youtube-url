@@ -5,7 +5,7 @@ import { User } from '../user/user.entity';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import {
   MockType,
-  repositoryMockFactory,
+  sharingRepositoryMockFactory as repositoryMockFactory,
 } from '../utils/jestRepositoryMockFactory';
 import { VideoSharing } from './video-sharing.entity';
 import { Repository } from 'typeorm';
@@ -74,5 +74,11 @@ describe('VideoSharingService', () => {
     const result = await service.createNewSharing(newSharingDTO, user);
     expect(result).toHaveProperty('thumbnail_link');
     expect(result).toHaveProperty('title');
+  });
+
+  it('Test get all sharing successfully', async () => {
+    const result = await service.getAllSharing();
+    expect(result[0]).toHaveProperty('link');
+    expect(result[0]).toHaveProperty('id');
   });
 });

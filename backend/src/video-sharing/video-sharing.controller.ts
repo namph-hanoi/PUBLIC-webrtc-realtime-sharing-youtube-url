@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   UseGuards,
@@ -27,5 +28,12 @@ export class VideoSharingController {
       newSharingDTO,
       request.user,
     );
+  }
+
+  @UseGuards(AuthGuard('jwt'))
+  @Get()
+  @UsePipes(ValidationPipe)
+  getAllSharing() {
+    return this.videoSharingService.getAllSharing();
   }
 }
