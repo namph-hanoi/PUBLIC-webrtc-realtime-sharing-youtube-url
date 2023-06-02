@@ -8,6 +8,7 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 import { User } from '../user/user.entity';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'video_sharings' })
 export class VideoSharing {
@@ -30,9 +31,11 @@ export class VideoSharing {
   @JoinColumn({ name: 'owner_id' })
   owner: User;
 
+  @Exclude()
   @CreateDateColumn({ name: 'created_at' })
   createdAt: number;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at' })
   deleted_at: Date;
 }

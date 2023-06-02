@@ -7,6 +7,7 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '../utils/jestRepositoryMockFactory';
 import { User } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
+import { VideoSharing } from './video-sharing.entity';
 
 describe('VideoSharingController', () => {
   let controller: VideoSharingController;
@@ -19,6 +20,10 @@ describe('VideoSharingController', () => {
         JwtService,
         {
           provide: getRepositoryToken(User),
+          useFactory: repositoryMockFactory,
+        },
+        {
+          provide: getRepositoryToken(VideoSharing),
           useFactory: repositoryMockFactory,
         },
       ],

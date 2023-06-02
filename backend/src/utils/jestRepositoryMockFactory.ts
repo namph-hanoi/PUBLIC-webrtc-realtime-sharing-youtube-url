@@ -18,6 +18,7 @@ export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(
       },
     })),
     save: jest.fn((entity) => entity),
+    create: jest.fn((entity) => entity),
     validateInputPassword: jest.fn((entity) => entity),
   }),
 );

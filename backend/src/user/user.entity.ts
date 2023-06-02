@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { VideoSharing } from '../video-sharing/video-sharing.entity';
 import * as bcrypt from 'bcryptjs';
+import { Exclude } from 'class-transformer';
 
 @Entity({ name: 'users' })
 @Unique(['email'])
@@ -21,15 +22,19 @@ export class User {
   @Column()
   email: string;
 
+  @Exclude()
   @Column()
   password: string;
 
+  @Exclude()
   @Column()
   salt: string;
 
+  @Exclude()
   @CreateDateColumn({ name: 'created_at' })
   createdAt: number;
 
+  @Exclude()
   @DeleteDateColumn({ name: 'deleted_at' })
   deleted_at: Date;
 

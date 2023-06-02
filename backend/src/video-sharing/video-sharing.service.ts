@@ -10,13 +10,17 @@ import {
 } from '../utils/regExpFunc';
 import { executeWget } from '../utils/curlYoutubeHTML';
 import { User } from '../user/user.entity';
-import { extractStringByRegex } from 'src/utils/regExpFunc';
+import { extractStringByRegex } from '../utils/regExpFunc';
+import { instanceToPlain } from 'class-transformer';
 @Injectable()
 export class VideoSharingService {
+  executeWget: (string) => Promise<string>;
   constructor(
     @InjectRepository(VideoSharing)
     private readonly videoSharingRepository: Repository<VideoSharing>,
-  ) {}
+  ) {
+    this.executeWget = executeWget;
+  }
 
   async createNewSharing(newSharingDTO: CreateSharingDTO, user: User) {
     const { url } = newSharingDTO;
@@ -27,7 +31,7 @@ export class VideoSharingService {
     let videoThumbnailUrl: string;
   //  try { call fetch youtube page to get the video info } catch (error)
     try {
-      youtubePageSouce = await executeWget(url);
+      youtubePageSouce = await this.executeWget(url);
       videoDescription = extractStringByRegex(
         youtubePageSouce,
         youtubeDescriptionRegExp,
@@ -37,7 +41,6 @@ export class VideoSharingService {
         youtubePageSouce,
         youtubeThumbnailUrlRegExp,
       );
-      console.log(videoDescription, videoTitle, videoThumbnailUrl);
     } catch (error) {
       throw new HttpException(
         'Fail fetching youtube page',
@@ -51,7 +54,6 @@ export class VideoSharingService {
     newSharing.title = videoTitle;
     newSharing.description = videoDescription;
     await this.videoSharingRepository.save(newSharing);
-    // Todo: create response DTO
-    return 'Video created';
+    return instanceToPlain(newSharing);
   }
 }
