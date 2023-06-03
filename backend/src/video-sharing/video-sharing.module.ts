@@ -4,10 +4,11 @@ import { VideoSharingService } from './video-sharing.service';
 import { User } from '../user/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { VideoSharing } from './video-sharing.entity';
-
+import { EventsGateway } from '../socket-gateway/events.gateway';
+import { JwtModule } from '@nestjs/jwt';
 @Module({
-  imports: [TypeOrmModule.forFeature([User, VideoSharing])],
+  imports: [TypeOrmModule.forFeature([User, VideoSharing]), JwtModule],
   controllers: [VideoSharingController],
-  providers: [VideoSharingService],
+  providers: [VideoSharingService, EventsGateway],
 })
 export class VideoSharingModule {}

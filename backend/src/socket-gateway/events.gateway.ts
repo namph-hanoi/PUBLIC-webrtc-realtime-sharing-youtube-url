@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, UseGuards } from '@nestjs/common';
+import { HttpException, HttpStatus, Inject, Injectable, UseGuards } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AuthGuard } from '@nestjs/passport';
@@ -12,11 +12,10 @@ import {
 import { Server } from 'socket.io';
 
 @WebSocketGateway()
+@Injectable()
 export class EventsGateway {
   constructor(
-    @Inject(JwtService)
     private readonly jwtService: JwtService,
-    @Inject(ConfigService)
     private readonly configService: ConfigService,
   ) {}
 

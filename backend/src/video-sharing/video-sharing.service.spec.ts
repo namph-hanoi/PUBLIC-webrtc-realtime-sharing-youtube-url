@@ -9,15 +9,22 @@ import {
 } from '../utils/jestRepositoryMockFactory';
 import { VideoSharing } from './video-sharing.entity';
 import { Repository } from 'typeorm';
+import { EventsGateway } from '../socket-gateway/events.gateway';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 describe('VideoSharingService', () => {
   let service: VideoSharingService;
+  let eventsGatewayService: EventsGateway;
   let videoSharingRepository: MockType<Repository<VideoSharing>>;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
+        EventsGateway,
+        ConfigService,
         VideoSharingService,
+        JwtService,
         {
           provide: getRepositoryToken(VideoSharing),
           useFactory: repositoryMockFactory,
@@ -26,6 +33,7 @@ describe('VideoSharingService', () => {
     }).compile();
 
     service = module.get<VideoSharingService>(VideoSharingService);
+    eventsGatewayService = module.get<EventsGateway>(EventsGateway);
     videoSharingRepository = module.get(getRepositoryToken(VideoSharing));
   });
 
@@ -69,11 +77,14 @@ describe('VideoSharingService', () => {
     const user = new User();
     user.id = 1;
     user.email = 'namph.tech@gmail.com';
-    // user.
+    const spyOnBroadcast = jest
+      .spyOn(eventsGatewayService, 'broadcastEvent')
+      .mockImplementation(() => undefined);
 
     const result = await service.createNewSharing(newSharingDTO, user);
     expect(result).toHaveProperty('thumbnail_link');
     expect(result).toHaveProperty('title');
+    expect(spyOnBroadcast).toHaveBeenCalled();
   });
 
   it('Test get all sharing successfully', async () => {

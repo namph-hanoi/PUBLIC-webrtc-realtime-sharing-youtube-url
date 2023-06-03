@@ -12,12 +12,14 @@ import { executeWget } from '../utils/curlYoutubeHTML';
 import { User } from '../user/user.entity';
 import { extractStringByRegex } from '../utils/regExpFunc';
 import { instanceToPlain } from 'class-transformer';
+import { EventsGateway } from '../socket-gateway/events.gateway';
 @Injectable()
 export class VideoSharingService {
   executeWget: (string) => Promise<string>;
   constructor(
     @InjectRepository(VideoSharing)
     private readonly videoSharingRepository: Repository<VideoSharing>,
+    private readonly eventGatewayService: EventsGateway,
   ) {
     this.executeWget = executeWget;
   }
@@ -54,6 +56,10 @@ export class VideoSharingService {
     newSharing.title = videoTitle;
     newSharing.description = videoDescription;
     await this.videoSharingRepository.save(newSharing);
+    this.eventGatewayService.broadcastEvent(
+      'newSharing',
+      instanceToPlain(newSharing),
+    );
     return instanceToPlain(newSharing);
   }
 

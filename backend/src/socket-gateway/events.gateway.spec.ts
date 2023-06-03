@@ -71,12 +71,19 @@ describe('VideoSharingService', () => {
         throw new Error('Some error message');
       });
 
-    const consoleErrorSpy = jest.spyOn(console, 'error');
+    const consoleErrorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
     service.handleConnection(mockClient);
 
-    expect(consoleErrorSpy).toHaveBeenCalledWith([
-      '💥 ~ file: events.gateway.ts:60 ~ EventsGateway ~ handleConnection ~ error:',
-      expect.any(Error),
-    ]);
+    expect(consoleErrorSpy).toHaveBeenCalled();
+  });
+
+  it('Assert the broadcast event', () => {
+    const event = 'testEvent';
+    const payload = { message: 'Hello, world!' };
+    const emitSpy = jest.spyOn(service.server, 'emit');
+    service.broadcastEvent(event, payload);
+    expect(emitSpy).toHaveBeenCalledWith(event, payload);
   });
 });

@@ -6,5 +6,6 @@ import { JwtModule } from '@nestjs/jwt';
 @Module({
   imports: [JwtModule],
   providers: [EventsGateway],
+  exports: [EventsGateway],
 })
 export class SocketGatewayModule {}

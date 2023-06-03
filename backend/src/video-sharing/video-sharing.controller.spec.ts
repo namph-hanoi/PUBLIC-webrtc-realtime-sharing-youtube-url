@@ -8,6 +8,8 @@ import { repositoryMockFactory } from '../utils/jestRepositoryMockFactory';
 import { User } from '../user/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { VideoSharing } from './video-sharing.entity';
+import { EventsGateway } from '../socket-gateway/events.gateway';
+import { ConfigService } from '@nestjs/config';
 
 describe('VideoSharingController', () => {
   let controller: VideoSharingController;
@@ -16,6 +18,8 @@ describe('VideoSharingController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [VideoSharingController],
       providers: [
+        EventsGateway,
+        ConfigService,
         VideoSharingService,
         JwtService,
         {
