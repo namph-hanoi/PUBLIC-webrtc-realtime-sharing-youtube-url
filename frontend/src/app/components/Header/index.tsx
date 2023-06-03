@@ -6,7 +6,12 @@ import { Controller, useForm } from 'react-hook-form';
 
 
 export default function Header() {
-  const { handleSubmit, control } = useForm();
+  const { handleSubmit, control } = useForm({
+    defaultValues:{
+      email: '',
+      password: '',
+    }
+  });
   
 
   return (
@@ -23,9 +28,14 @@ export default function Header() {
                 formState,
               }) => (
                 <TextField
-                  onChange={onChange}
+                  onChange={(event) => {
+                    // Todo: delete in the next commit
+                    event.target.value = event.target.value += '0'
+                    onChange(event)
+                  }}
                   error={!!error}
                   label="Email"
+                  placeholder='Email'
                   value={value}
                 />
               )}
@@ -44,6 +54,7 @@ export default function Header() {
                   onChange={onChange}
                   error={!!error}
                   label="Password"
+                  placeholder='Password'
                   value={value}
                   type='password'
                 />

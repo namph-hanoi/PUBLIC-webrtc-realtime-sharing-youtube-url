@@ -1,12 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import HomePgae from "./index";
+import HomePage from "./index";
 
-test('if an amount and note is entered, the pay button becomes enabled', async () => {
-    render(<HomePgae />);
+const setup = () => render(<HomePage />);
 
-    const textElement = screen.getByText('This is the header');
-
-
-    expect(textElement).toBeInTheDocument();
+describe('<<<--- HOMEPAGE --->>>', () => {
+  it('Expect case when there is no sharing', async () => {
+      setup();
+  })
+  it('Expect case when there are some sharings', async () => {
+      setup();
+  })
 });
+

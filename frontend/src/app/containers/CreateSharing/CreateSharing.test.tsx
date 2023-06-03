@@ -2,11 +2,27 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import CreateSharing from "./index";
 
-test('if an amount and note is entered, the pay button becomes enabled', async () => {
-    render(<CreateSharing />);
+const setup = () => render(<CreateSharing />);
 
-    const textElement = screen.getByText('This is the header');
+describe('<<<--- CREATE SHARING --->>>', () => {
+  it('Expect case user inputs invalid youtube link ', async () => {
+      setup();
+  })
+  it('Expect case user inputs valid youtube link ', async () => {
+      setup();
+  })
+  it('Expect button \'share\' enable when the input valid', async () => {
+      setup();
+  })
+  it('Expect button \'share\' disable when the input invalid', async () => {
+      setup();
+  })
 
+  it('Expect the browser to return to HomePage after createSharing successful', async () => {
+      setup();
+  })
 
-    expect(textElement).toBeInTheDocument();
-});
+  it('Expect not rendering the page when the user\' state is not logged-in', async () => {
+      setup();
+  })
+})
