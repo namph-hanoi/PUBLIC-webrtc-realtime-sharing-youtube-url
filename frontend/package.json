@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.0",
     "@emotion/styled": "^11.11.0",
+    "@hookform/resolvers": "^3.1.0",
     "@mui/material": "^5.13.3",
     "@reduxjs/toolkit": "^1.8.1",
     "@testing-library/jest-dom": "^5.16.4",
@@ -50,9 +51,11 @@
     ]
   },
   "devDependencies": {
+    "@cfaester/enzyme-adapter-react-18": "^0.7.0",
     "@testing-library/cypress": "^9.0.0",
     "autoprefixer": "^10.4.14",
     "cypress": "^12.13.0",
+    "enzyme": "^3.11.0",
     "postcss": "^8.4.24",
     "tailwindcss": "^3.3.2",
     "typescript-plugin-css-modules": "^5.0.1"
