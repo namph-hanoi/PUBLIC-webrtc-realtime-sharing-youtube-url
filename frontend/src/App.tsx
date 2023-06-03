@@ -1,9 +1,8 @@
 import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import './App.css';
+import styles from './App.module.css';
+import './index.css';
 import HomePage from './app/containers/Home';
 import CreateSharing from './app/containers/CreateSharing';
 
