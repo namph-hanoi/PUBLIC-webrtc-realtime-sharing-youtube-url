@@ -9,7 +9,7 @@ const mainAxiosInstance = axios.create(mainRequestConfig);
 
 mainAxiosInstance.interceptors.request.use(
   config => {
-    // Todo: store in a constant
+    // Todo: store token in a constant
     const token = localStorage.getItem('ACCESS_TOKEN_KEY');
     if (token) config.headers.Authorization = token;
     return config;
@@ -39,7 +39,6 @@ const mainRequest = (
   if (method === 'get') {
     params = payload;
   }
-  debugger;
   return mainAxiosInstance({ url, data, params, method, headers });
 };
 
