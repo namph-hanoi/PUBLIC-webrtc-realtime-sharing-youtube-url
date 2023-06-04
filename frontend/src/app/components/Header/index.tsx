@@ -3,6 +3,7 @@ import { Button, Container, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
+import apiRequest from '../../../features/request';
 
 const passwordErrorMessage = 'Password length should be from 4 to 20 characters long'
 const schema = yup.object().shape({
@@ -25,14 +26,14 @@ export default function Header() {
     resolver: yupResolver(schema),
   });
   
-  const sendRequest = (data: any) => {
-    fetch(`${window.location.origin}/api/auth/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+  const sendRequest = async (data: any) => {
+    try {
+      const result = await apiRequest(`/auth/login`, 'POST', {...data});
+      
+      console.log(["🚀 ~ file: index.tsx:33 ~ sendRequest ~ result:", result]);
+    } catch (error) {
+      console.error(["💥 ~ file: index.tsx:34 ~ sendRequest ~ error:", error]);
+    }
   };
 
   return (
