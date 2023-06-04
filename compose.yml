@@ -1,4 +1,17 @@
+networks:
+  remi:
+    driver: bridge
+
 services:
+  # gateway:
+  #   container_name: gateway_remi
+  #   image: nginx
+  #   # mount nginx config file with ./gateway/config
+  #   networks:
+  #     - remi
+          
+
+
   database:
     container_name: db_remi
     image: mysql
@@ -7,4 +20,38 @@ services:
       - .env.development
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
+    # depends_on:
+    #   - gateway
+    networks:
+      - remi
+          
+
+  backend:
+    container_name: be_remi
+    #  Dockerfile in the ./backend
+    # target: development 
+    build:
+      context: ./backend
+      target: development
+    restart: always
+    env_file:
+      - .env.development
+    ports:
+      - ${BACKEND_PORT}:${BACKEND_PORT}
+    volumes:
+      - ./backend/:/app/
+    working_dir: /app
+    depends_on:
+      - database
+    links:
+      - database
+    networks:
+      - remi
+  
+          
+
+  
+
+  
+
       
