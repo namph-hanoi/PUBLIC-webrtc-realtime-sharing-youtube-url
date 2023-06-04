@@ -1,5 +1,5 @@
-import Header from '../../components/Header';
-
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
 export default function HomePage({ children }: { children: JSX.Element }) {
   //  import redux global state here
 
@@ -8,6 +8,7 @@ export default function HomePage({ children }: { children: JSX.Element }) {
   return (
     <>
       {children}
+      <ToastContainer/>
     </>
   )
 }
