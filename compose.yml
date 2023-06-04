@@ -3,15 +3,23 @@ networks:
     driver: bridge
 
 services:
-  # gateway:
-  #   container_name: gateway_remi
-  #   image: nginx
-  #   # mount nginx config file with ./gateway/config
-  #   networks:
-  #     - remi
+  gateway:
+    image: nginx
+    container_name: port_remi
+    volumes:
+      - ./gateway/templates:/etc/nginx/templates
+      - ./gateway/default.conf:/etc/nginx/conf.d/default.conf
+    ports:
+    - "3001:3001"
+    environment:
+    - NGINX_HOST=debian.vg
+    - NGINX_PORT=3001
+    networks:
+      - remi
+    links:
+      - frontend
+      - backend
           
-
-
   database:
     container_name: db_remi
     image: mysql
@@ -20,16 +28,11 @@ services:
       - .env.development
     ports:
       - ${MYSQL_PORT}:${MYSQL_PORT}
-    # depends_on:
-    #   - gateway
     networks:
       - remi
           
-
   backend:
     container_name: be_remi
-    #  Dockerfile in the ./backend
-    # target: development 
     build:
       context: ./backend
       target: development
@@ -47,11 +50,24 @@ services:
       - database
     networks:
       - remi
-  
-          
 
-  
-
-  
-
-      
+  frontend:
+    container_name: fe_remi
+    build:
+      context: ./frontend
+      target: development
+    restart: always
+    env_file:
+      - .env.development
+    ports:
+      # Don't use this port but use the gateway port to avoid CORS on chrome
+      - ${FRONTEND_PORT}:${FRONTEND_PORT}
+    volumes:
+      - ./frontend/:/app/
+    working_dir: /app
+    depends_on:
+      - backend
+    links:
+      - backend
+    networks:
+      - remi

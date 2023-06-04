@@ -25,12 +25,20 @@ export default function Header() {
     resolver: yupResolver(schema),
   });
   
-  if (errors.password) debugger;
+  const sendRequest = (data: any) => {
+    fetch(`${window.location.origin}/api/auth/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  };
 
   return (
     <div className='pt-5'>
       <Container className='text-right'>
-        <form onSubmit={handleSubmit(data => console.log(data))}>
+        <form onSubmit={handleSubmit(sendRequest)}>
           <span className='inline-block capitalize'>
             <Controller
               control={control}
