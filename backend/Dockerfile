@@ -12,4 +12,6 @@ COPY . .
 ARG NODE_ENV=development
 ENV NODE_ENV=${NODE_ENV}
 
-CMD ["yarn", "start:dev"]
+RUN npm i -g @nestjs/cli
+
+ENTRYPOINT ["yarn", "start:dev"]
