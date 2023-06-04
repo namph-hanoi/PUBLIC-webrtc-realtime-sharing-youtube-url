@@ -11,17 +11,20 @@ import { LoginDTO } from './dto/login-dto';
 import { plainToInstance } from 'class-transformer';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import { UserService } from '../user/user.service';
 
 describe('AuthService', () => {
   let service: AuthService;
   let userRepository: MockType<Repository<User>>;
   let jwtService: JwtService;
+  let userService: UserService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         AuthService,
         JwtService,
+        UserService,
         {
           provide: getRepositoryToken(User),
           useFactory: repositoryMockFactory,
@@ -32,6 +35,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
     jwtService = module.get<JwtService>(JwtService);
     userRepository = module.get(getRepositoryToken(User));
+    userService = module.get<UserService>(UserService);
   });
 
   it('should be defined', () => {
@@ -47,13 +51,24 @@ describe('AuthService', () => {
       password: 'namph.tech@gmail.com',
     };
     const mockUserDTO = plainToInstance(LoginDTO, mockUserPayload);
+    let recursiveCallCount = 1;
+    jest.spyOn(userRepository, 'findOne').mockImplementation(() => {
+      if (recursiveCallCount === 1) {
+        // Get no user in the first call
+        recursiveCallCount += 1;
+        return undefined;
+      }
 
-    jest.spyOn(userRepository, 'findOne').mockImplementation(undefined);
-
+      return {
+        ...mockUserPayload,
+        validateInputPassword: jest.fn().mockReturnValue(true),
+      };
+    });
+    jest.spyOn(userService, 'registerNewUser').mockImplementation(undefined);
+    jest.spyOn(jwtService, 'sign').mockReturnValue('github:namph-hanoi');
+    const response = await service.login(mockUserDTO);
     // Run the function
-    await expect(service.login(mockUserDTO)).rejects.toThrowError(
-      new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST),
-    );
+    expect(response).toHaveProperty('accessToken');
   });
   it('Test password mismatched', async () => {
     // Create an existing entity with userRepository

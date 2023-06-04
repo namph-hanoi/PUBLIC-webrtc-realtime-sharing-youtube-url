@@ -1,15 +1,17 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/user.entity';
 import { Repository } from 'typeorm';
 import { LoginDTO } from './dto/login-dto';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     private jwtService: JwtService,
+    private userService: UserService,
   ) {}
 
   async login(loginDTO: LoginDTO): Promise<{ accessToken: string }> {
@@ -18,8 +20,11 @@ export class AuthService {
       where: { email },
     });
 
-    if (!user)
-      throw new HttpException("User doesn't exist", HttpStatus.BAD_REQUEST);
+    if (!user) {
+      await this.userService.registerNewUser(loginDTO);
+      return await this.login(loginDTO);
+    }
+
     const isValidPassword = await user.validateInputPassword(password);
 
     if (!isValidPassword) {

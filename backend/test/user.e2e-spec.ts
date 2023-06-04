@@ -2,9 +2,6 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
-import { UserModule } from 'src/user/user.module';
-import { appDataSource } from './app.e2e-spec';
-import { User } from '../src/user/user.entity';
 
 describe('For Route /user... (e2e)', () => {
   let app: INestApplication;

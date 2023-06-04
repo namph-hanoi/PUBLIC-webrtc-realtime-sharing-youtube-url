@@ -7,6 +7,7 @@ import { User } from '../user/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtStrategy } from './jwt.strategy';
 import { ConfigService } from '@nestjs/config';
+import { UserModule } from '../user/user.module';
 
 const jwtFactory = {
   useFactory: async (configService: ConfigService) => {
@@ -27,6 +28,7 @@ const jwtFactory = {
     PassportModule.register({
       defaultStrategy: 'jwt',
     }),
+    UserModule,
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy],

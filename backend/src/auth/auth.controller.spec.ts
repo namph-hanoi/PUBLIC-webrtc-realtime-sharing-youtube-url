@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { repositoryMockFactory } from '../utils/jestRepositoryMockFactory';
 import { JwtService } from '@nestjs/jwt';
+import { UserService } from '../user/user.service';
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -16,6 +17,7 @@ describe('AuthController', () => {
       controllers: [AuthController],
       providers: [
         AuthService,
+        UserService,
         JwtService,
         {
           provide: getRepositoryToken(User),
