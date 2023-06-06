@@ -1,5 +1,6 @@
 import axios, { AxiosHeaders, Method as AxiosMethod } from 'axios';
-import { string } from 'yup';
+import { toast } from 'react-toastify';
+
 
 const mainRequestConfig = {
   baseURL: `${window.location.origin}/api`,
@@ -25,6 +26,7 @@ mainAxiosInstance.interceptors.response.use(
     return response;
   },
   error => {
+    toast.error(`Status Code ${error.response.data.statusCode} ~ ${error.response.data.message}`)
     return Promise.reject(error);
   },
 );

@@ -20,8 +20,8 @@ export default function CreateSharing() {
       <Header />
       <Container>
         <div className='flex justify-center items-center'>
-          <Box>
-            Share a Youtube movie
+          <Box className='flex justify-center items-center pt-20'>
+            <p>Share a Youtube movie</p>
             <TextField
               onChange={e => {
                 const { value } = e.target;
