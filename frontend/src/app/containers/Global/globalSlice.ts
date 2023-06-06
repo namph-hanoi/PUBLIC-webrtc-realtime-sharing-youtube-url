@@ -1,19 +1,25 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { RootState } from '../../../app/store';
 import apiRequest from '../../../features/request';
 import { ILoginPayload } from '../../components/Header';
 import { toast } from 'react-toastify';
 
+type RequestStatus = 'idle' | 'loading' | 'failed' | 'suceeded';
+
 export interface GlobalState {
   userEmail: string;
-  status: 'idle' | 'loading' | 'failed';
-  listOfSharing: [],
+  loginStatus: RequestStatus;
+  sharingStatus: RequestStatus;
+  listOfSharing: [];
+  globalLoading: boolean;
 }
 
 const initialState: GlobalState = {
   userEmail: '',
-  status: 'idle',
-  listOfSharing: []
+  loginStatus: 'idle',
+  sharingStatus: 'idle',
+  listOfSharing: [],
+  globalLoading: false,
 };
 
 export const loginRequest = createAsyncThunk(
@@ -37,6 +43,7 @@ export const shareNewVideo = createAsyncThunk(
     if (result?.data) {
       toast.success('Video share successfully.')
     }
+    return 'suceeded';
   }
 );
 
@@ -48,32 +55,46 @@ export const globalSlice = createSlice({
       state.userEmail = initialState.userEmail;
       localStorage.removeItem('ACCESS_TOKEN_KEY');
     },
+    resetSharingState: (state) => {
+      state.sharingStatus = 'idle';
+    },
+    setGlobalLoading: (state, action: PayloadAction<boolean>) => {
+        state.globalLoading = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginRequest.pending, (state) => {
-        state.status = 'loading';
+        state.loginStatus = 'loading';
+        state.globalLoading = true;
       })
       .addCase(loginRequest.fulfilled, (state, action) => {
-        state.status = 'idle';
+        state.loginStatus = 'idle';
         state.userEmail = action.payload.email;
+        state.globalLoading = false;
       })
       .addCase(loginRequest.rejected, (state) => {
-        state.status = 'failed';
+        state.loginStatus = 'failed';
+        state.globalLoading = false;
       })
-      .addCase(shareNewVideo.pending, (state) => {
-        state.status = 'loading';
+      .addCase(shareNewVideo.pending, (state, action: PayloadAction) => {
+        state.sharingStatus = 'loading';
+        state.globalLoading = true;
       })
       .addCase(shareNewVideo.fulfilled, (state, action) => {
-        state.status = 'idle';
+        if (action.payload) {
+          state.sharingStatus = 'suceeded';
+        }
+        state.globalLoading = false;
       })
       .addCase(shareNewVideo.rejected, (state) => {
-        state.status = 'failed';
+        state.sharingStatus = 'failed';
+        state.globalLoading = false;
       });
   },
 });
 
-export const { logout } = globalSlice.actions;
+export const { resetSharingState, setGlobalLoading,  logout } = globalSlice.actions;
 
 export const selectGlobalState = (state: RootState) => state.global;
 

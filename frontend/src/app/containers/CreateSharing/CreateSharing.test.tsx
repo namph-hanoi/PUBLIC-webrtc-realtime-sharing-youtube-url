@@ -7,14 +7,9 @@ const setup = () => render(<CreateSharing />);
 describe('<<<--- CREATE SHARING --->>>', () => {
   it('Expect case user inputs invalid youtube link ', async () => {
       setup();
+      //   Expect input stays the same for later edit action from user
   })
   it('Expect case user inputs valid youtube link ', async () => {
-      setup();
-  })
-  it('Expect button \'share\' enable when the input valid', async () => {
-      setup();
-  })
-  it('Expect button \'share\' disable when the input invalid', async () => {
       setup();
   })
 

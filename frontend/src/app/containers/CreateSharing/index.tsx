@@ -1,12 +1,16 @@
 import React from 'react'
 import Header from '../../components/Header'
 import { Box, Button, Container, TextField } from '@mui/material'
-import { shareNewVideo } from '../Global/globalSlice';
-import { useAppDispatch } from '../../hooks';
+import { resetSharingState, shareNewVideo, selectGlobalState } from '../Global/globalSlice';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 export default function CreateSharing() {
+  const navigate = useNavigate();
   const [youtubeLink, setYoutubeLink] = React.useState<string>('');
   const dispatch = useAppDispatch();
+  const { sharingStatus } = useAppSelector(selectGlobalState);
+
   const handleShare = () => {
     try {
       dispatch(shareNewVideo(youtubeLink));
@@ -14,6 +18,14 @@ export default function CreateSharing() {
       console.error(error);
     }
   };
+
+  React.useEffect(() => {
+    if (sharingStatus === 'suceeded') {
+      dispatch(resetSharingState());
+      navigate('/');
+    }
+  }, [sharingStatus, dispatch, navigate]);
+
 
   return (
     <>
@@ -23,6 +35,8 @@ export default function CreateSharing() {
           <Box className='flex justify-center items-center pt-20'>
             <p>Share a Youtube movie</p>
             <TextField
+              defaultValue={''}
+              value={youtubeLink}
               onChange={e => {
                 const { value } = e.target;
                 setYoutubeLink(value);

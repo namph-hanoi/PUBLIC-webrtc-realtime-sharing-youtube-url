@@ -1,12 +1,16 @@
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
-export default function HomePage({ children }: { children: JSX.Element }) {
-  //  import redux global state here
+import LoadingBox from '../../components/LoadingBox';
+import { ReactNode } from 'react';
+import { useAppSelector } from '../../hooks';
+import { selectGlobalState } from './globalSlice';
 
-  // Toast message here, depends on the globalState
+export default function GlobalWrap({ children }: {children: ReactNode}) {
+  const { globalLoading } = useAppSelector(selectGlobalState);
 
   return (
     <>
+      {globalLoading && (<LoadingBox />)}
       {children}
       <ToastContainer/>
     </>
