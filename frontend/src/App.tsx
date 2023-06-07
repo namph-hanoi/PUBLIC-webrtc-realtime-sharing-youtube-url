@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import './App.module.css';
-import './index.css';
+import './App.module.scss';
+import './index.scss';
 import HomePage from './app/containers/Home';
 import CreateSharing from './app/containers/CreateSharing';
 import GlobalContainer from './app/containers/Global';

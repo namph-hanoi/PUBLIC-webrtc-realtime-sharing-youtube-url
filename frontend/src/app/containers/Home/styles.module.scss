@@ -4,14 +4,16 @@
 
 .desc_wrap {
   position: relative;
-  width: 100%; /* Take the full width of the container */
-  padding-top: 56%; /* Set the height as a percentage of the width */
+  width: 100%;
+  padding-top: 56%;
   background-color: #f0f0f0;
-  overflow-y: auto;
+  overflow: auto;
 }
 
 .desc_content {
   position: absolute;
   top: 0;
   left: 0;
+  padding: 1rem;
+  font-size: 12px;
 }

@@ -1,13 +1,16 @@
 import React from 'react';
-import { Button, Container, TextField } from '@mui/material';
+import { Button, Container, Grid, TextField } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useAppSelector, useAppDispatch } from '../../../app/hooks';
 import { loginRequest, logout, selectGlobalState } from '../../containers/Global/globalSlice';
 import { Link, useNavigate } from 'react-router-dom';
+import HomeIcon from '@mui/icons-material/Home';
+import Divider from '@mui/material/Divider';
+import styles from './styles.module.scss'
 
-const passwordErrorMessage = 'Password length should be from 4 to 20 characters long'
+const passwordErrorMessage = 'Must be 4-20 characters long'
 const schema = yup.object().shape({
   email: yup.string().email().required('Email field is required'),
   password: yup.string().min(4, passwordErrorMessage).max(20, passwordErrorMessage).required('Password field is required'),
@@ -53,12 +56,15 @@ function Header() {
   }, [userEmail, navigate]);
 
   return (
-    <div className='pt-5'>
+    <div className={`${styles.wrap} pt-5`}>
       <Container>
-        <div className='flex justify-between'>
-          <Button type="button">
-            <Link to='/'>Home</Link>
-          </Button>
+        <Grid container  className={`flex justify-between ${styles.wrap_btn}`}>
+          <Grid item xs={12} md={6} className='md:text-left'>
+            <Button type="button" variant='outlined'>
+              <Link to='/'><HomeIcon /> Home</Link>
+            </Button>
+          </Grid>
+          <Grid item xs={12} md={6}  className='md:text-right'>
           {
             !!userEmail ? (
               <div>
@@ -68,8 +74,8 @@ function Header() {
               </div>
             ) :
             (
-                <form className="inline-block" onSubmit={handleSubmit(sendRequest)}>
-                  <span className='inline-block capitalize'>
+                <form className="flex justify-center" onSubmit={handleSubmit(sendRequest)}>
+                  <span className={`${styles.input} inline-block capitalize`}>
                     <Controller
                       control={control}
                       name="email"
@@ -87,6 +93,9 @@ function Header() {
                           placeholder='Email'
                           value={value}
                           helperText={error?.message}
+                          className={`${styles.mui_input}`}
+                          InputLabelProps={{ shrink: true }}
+                          FormHelperTextProps={{ className: styles.form_helper}}
                         />
                       )}
                     />
@@ -113,17 +122,22 @@ function Header() {
                           value={value}
                           type='password'
                           helperText={error?.message}
+                          className={`${styles.mui_input}`}
+                          InputLabelProps={{ shrink: true }}
+                          FormHelperTextProps={{ className: styles.form_helper}}
                         />
                       )}
                     />
                   </span>
-                  <span className="ml-2">
-                    <Button type="submit" data-testid="button">Login/Register</Button>
+                  <span className={`ml-2 inline-block ${styles.wrap_btn}`}>
+                    <Button variant='contained' color='primary' type="submit" data-testid="button">Login/Register</Button>
                   </span>
                 </form>
             )
           }
-        </div>
+          </Grid>
+        </Grid>
+      <Divider className={styles.divider} />
       </Container>
     </div>
   )

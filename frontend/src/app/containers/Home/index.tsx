@@ -1,9 +1,9 @@
 import React from 'react'
 import Header from '../../components/Header'
-import { Container, Grid } from '@mui/material'
+import { Container, Grid, Paper } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getAllSharings, selectGlobalState } from '../Global/globalSlice';
-import styles from './styles.module.css';
+import styles from './styles.module.scss';
 
 interface ISharingItem {
     id: number,
@@ -39,13 +39,14 @@ function HomePage() {
   return (
     <div className={`${styles.wrap}`}>
       <Header></Header>
-      <Container>
+      <Container maxWidth="sm">
+        <div className='flex flex-col pt-10'>
         {
           !listOfSharing.length ? (
             <p>There is no sharing yet</p>
           ) : (
-            <div className='flex flex-col'>
-            {listOfSharing.map((sharingItem: ISharingItem) => (
+            listOfSharing.map((sharingItem: ISharingItem) => (
+              <Paper className='p-2 mb-5'>
                 <a target="_blank" href={sharingItem.link}>
                   <Grid container>
                     <Grid item md={6} xs={12}>
@@ -54,8 +55,9 @@ function HomePage() {
                     <Grid item md={6} xs={12}>
                       <div className={`${styles.desc_wrap}`}>
                         <div className={`${styles.desc_content}`}>
-                          <p>{sharingItem.title}</p>
-                          <p>Description:</p>
+                          <b>{sharingItem.title}</b>
+                          <br/>
+                          <p><b>Description:</b></p>
                           {/* Title and description */}
                           <>{rawStringToJSX(sharingItem.description)}</>
                         </div>
@@ -63,12 +65,11 @@ function HomePage() {
                     </Grid>
                   </Grid>
                 </a>
-            ))}
-            </div>
+              </Paper>
+            ))
           )
         }
-
-
+          </div>
       </Container>
     </div>
   )
