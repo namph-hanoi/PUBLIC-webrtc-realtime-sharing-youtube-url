@@ -30,7 +30,6 @@ export class VideoSharingController {
     );
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Get()
   @UsePipes(ValidationPipe)
   getAllSharing() {

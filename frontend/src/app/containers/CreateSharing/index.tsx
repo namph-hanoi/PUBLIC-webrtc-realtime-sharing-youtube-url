@@ -4,20 +4,23 @@ import { Box, Button, Container, TextField } from '@mui/material'
 import { resetSharingState, shareNewVideo, selectGlobalState } from '../Global/globalSlice';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
+import { useThrottledCallback } from 'use-debounce';
 
-export default function CreateSharing() {
+function CreateSharing() {
   const navigate = useNavigate();
   const [youtubeLink, setYoutubeLink] = React.useState<string>('');
   const dispatch = useAppDispatch();
   const { sharingStatus } = useAppSelector(selectGlobalState);
 
-  const handleShare = () => {
-    try {
-      dispatch(shareNewVideo(youtubeLink));
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const handleShare = useThrottledCallback(() => {
+      try {
+        dispatch(shareNewVideo(youtubeLink));
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    1000
+  );
 
   React.useEffect(() => {
     if (sharingStatus === 'suceeded') {
@@ -48,4 +51,6 @@ export default function CreateSharing() {
       </Container>
     </>
   )
-}
+};
+
+export default React.memo(CreateSharing);

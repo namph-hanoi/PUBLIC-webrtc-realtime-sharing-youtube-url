@@ -10,7 +10,7 @@ export interface GlobalState {
   userEmail: string;
   loginStatus: RequestStatus;
   sharingStatus: RequestStatus;
-  listOfSharing: [];
+  listOfSharing: any[];
   globalLoading: boolean;
 }
 
@@ -44,6 +44,19 @@ export const shareNewVideo = createAsyncThunk(
       toast.success('Video share successfully.')
     }
     return 'suceeded';
+  }
+);
+
+export const getAllSharings = createAsyncThunk(
+  'global/getMovies',
+  async () => {
+    const result =  await apiRequest(
+      '/video-sharing/',
+      'GET',
+    );
+    if (result?.data) {
+      return result.data;
+    }
   }
 );
 
@@ -89,6 +102,16 @@ export const globalSlice = createSlice({
       })
       .addCase(shareNewVideo.rejected, (state) => {
         state.sharingStatus = 'failed';
+        state.globalLoading = false;
+      })
+      .addCase(getAllSharings.pending, (state, action: PayloadAction) => {
+        state.globalLoading = true;
+      })
+      .addCase(getAllSharings.fulfilled, (state, action) => {
+        state.listOfSharing = action.payload.reverse();
+        state.globalLoading = false;
+      })
+      .addCase(getAllSharings.rejected, (state) => {
         state.globalLoading = false;
       });
   },

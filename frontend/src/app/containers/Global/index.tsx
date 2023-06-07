@@ -1,6 +1,6 @@
 import React from 'react';
 import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import LoadingBox from '../../components/LoadingBox';
 import { ReactNode } from 'react';
 import { useAppSelector } from '../../hooks';
@@ -8,6 +8,12 @@ import { selectGlobalState } from './globalSlice';
 import * as socketIOClient from "socket.io-client";
 import { Socket } from 'socket.io-client';
 
+interface INewNotification {
+  owner: {
+    email: string,
+  },
+  title: string,
+}
 
 export default function GlobalWrap({ children }: {children: ReactNode}) {
   const { userEmail, globalLoading } = useAppSelector(selectGlobalState);
@@ -22,8 +28,13 @@ export default function GlobalWrap({ children }: {children: ReactNode}) {
         }
       });
 
-      socketRef.current.on('newSharing', (data) => {
-        console.log(["🚀 ~ file: index.tsx:26 ~ React.useEffect ~ data:", data]);
+      socketRef.current.on('newSharing', (data: INewNotification) => {
+        const { owner, title } = data
+        toast.info(
+          <div>
+            <b>{owner.email}</b> has just shared a new video: <b>{title}</b>
+          </div>
+        )
       })
     }
     
